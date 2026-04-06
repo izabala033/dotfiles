@@ -9,7 +9,6 @@ hyprshutdown
 ttf-nerd-fonts-symbols
 xdg-desktop-portal-hyprland
 dunst
-wlogout
 
 # nm-applet, para conectarnos a wifi
 network-manager-applet 
