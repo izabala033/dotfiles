@@ -3,4 +3,10 @@ hyprland
 waybar
 hyprpaper
 hyprlauncher
+hyprpolkitagent
+hyprshutdown
+xdg-desktop-portal-hyprland
 dunst
+
+# nm-applet, para conectarnos a wifi
+network-manager-applet 
