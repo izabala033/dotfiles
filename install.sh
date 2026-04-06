@@ -27,16 +27,16 @@ install_packages() {
 
 install_packages "$DOTFILES_DIR/packages/base.txt"
 
+read -p "Install Hyprland packages? (y/n): " choice
+[[ $choice == [Yy]* ]] && install_packages "$DOTFILES_DIR/packages/hyprland.txt"
 
 echo "==> Stowing dotfiles..."
 cd "$DOTFILES_DIR"
 
-read -p "Install Hyprland packages? (y/n): " choice
-[[ $choice == [Yy]* ]] && install_packages "$DOTFILES_DIR/packages/hyprland.txt"
-
 for dir in */ ; do
     if [ "$dir" != "packages/" ]; then
         stow "${dir%/}"
+        echo "==> Stowed ${dir%/}"
     fi
 done
 
