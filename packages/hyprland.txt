@@ -2,7 +2,8 @@
 hyprland
 waybar
 hyprpaper
-hyprlauncher
+# hyprlauncher doesn't show icons, use rofi instead
+rofi
 hyprpolkitagent
 hyprshutdown
 ttf-nerd-fonts-symbols
