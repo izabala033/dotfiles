@@ -5,6 +5,7 @@ hyprpaper
 hyprlauncher
 hyprpolkitagent
 hyprshutdown
+ttf-nerd-fonts-symbols
 xdg-desktop-portal-hyprland
 dunst
 
