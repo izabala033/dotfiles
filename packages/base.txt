@@ -1,0 +1,11 @@
+# Shell
+zsh
+
+# Editor / terminal
+neovim
+kitty
+
+# Utilities
+htop
+wget
+curl

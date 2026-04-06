@@ -1,0 +1,6 @@
+# Hyprland essentials
+hyprland
+waybar
+hyprpaper
+wofi
+dunst
