@@ -13,16 +13,19 @@
     "battery",
     "cpu",
     "memory",
-    "tray",
-    "clock"
+    "clock#time",
+    "clock#date"
   ],
   "hyprland/workspaces": {
     "disable-scroll": true,
     "all-outputs": true
   },
-  "clock": {
+  "clock#time": {
     "format": "{:%H:%M}",
     "tooltip-format": "{:%A, %d %B %Y}"
+  },
+  "clock#date": {
+    "format": " {:%d/%m/%y}"
   },
   "network": {
     "format-wifi": "  {signalStrength}%",
@@ -39,9 +42,6 @@
   },
   "memory": {
     "format": "  {used}MB"
-  },
-  "tray": {
-    "spacing": 10
   },
   "wlr/taskbar": {
     "icon-size": 12,
