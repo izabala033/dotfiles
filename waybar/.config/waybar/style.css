@@ -1,6 +1,6 @@
 * {
   font-family: JetBrainsMono, monospace;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 window#waybar {
@@ -11,7 +11,7 @@ window#waybar {
 }
 
 #workspaces button {
-  padding: 5px 10px;
+  padding: 0px 10px;
   color: #cdd6f4;
   border-radius: 8px;
   margin: 0 3px;
@@ -34,8 +34,8 @@ window#waybar {
 #network,
 #cpu,
 #memory {
-  padding: 8px 12px;
-  margin: 0 4px;
+  padding: 0px 10px;
+  margin: 0 2px;
   border-radius: 8px;
   background-color: rgba(88, 86, 214, 0.25);
   border: 1px solid rgba(255, 255, 255, 0.1);
