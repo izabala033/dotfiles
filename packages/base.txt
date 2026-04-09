@@ -1,6 +1,9 @@
 # Shell
 zsh
 
+# Web
+brave-bin
+
 # Editor / terminal
 neovim
 kitty
