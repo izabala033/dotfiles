@@ -1,6 +1,9 @@
 # Shell
 zsh
 
+# Bluetooth
+blueman
+
 # Web
 brave-bin
 
