@@ -11,6 +11,7 @@ xdg-desktop-portal-hyprland
 dunst
 hyprshot
 hyprlock
+jq
 
 # nm-applet, para conectarnos a wifi
-network-manager-applet 
+network-manager-applet
