@@ -32,8 +32,14 @@ if [ "$monitor_count" -lt 2 ]; then
     exit 0
 fi
 
-left_monitor="$(printf '%s' "$monitors_json" | jq -r 'sort_by(.id) | .[0].name')"
-right_monitor="$(printf '%s' "$monitors_json" | jq -r 'sort_by(.id) | .[1].name')"
+if printf '%s' "$monitors_json" | jq -e '.[] | select(.name == "HDMI-A-2")' >/dev/null 2>&1 &&
+   printf '%s' "$monitors_json" | jq -e '.[] | select(.name == "DP-1")' >/dev/null 2>&1; then
+    left_monitor="HDMI-A-2"
+    right_monitor="DP-1"
+else
+    left_monitor="$(printf '%s' "$monitors_json" | jq -r 'sort_by(.id) | .[0].name')"
+    right_monitor="$(printf '%s' "$monitors_json" | jq -r 'sort_by(.id) | .[1].name')"
+fi
 focused_monitor="$(printf '%s' "$monitors_json" | jq -r '.[] | select(.focused == true) | .name')"
 paired_workspace=$((base_workspace + 10))
 
