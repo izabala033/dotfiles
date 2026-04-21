@@ -1,7 +1,7 @@
 # Hyprland essentials
 hyprland
 waybar
-hyprpaper
+awww
 # hyprlauncher doesn't show icons, use rofi instead
 rofi
 hyprpolkitagent
