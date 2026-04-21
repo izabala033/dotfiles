@@ -47,12 +47,15 @@ batch_cmd=""
 
 if [ "$mode" = "move" ]; then
     batch_cmd="dispatch movetoworkspace $base_workspace;"
+    final_monitor="$focused_monitor"
+else
+    final_monitor="$left_monitor"
 fi
 
 batch_cmd="${batch_cmd}dispatch focusmonitor $left_monitor;\
 dispatch workspace $base_workspace;\
 dispatch focusmonitor $right_monitor;\
 dispatch workspace $paired_workspace;\
-dispatch focusmonitor $focused_monitor"
+dispatch focusmonitor $final_monitor"
 
 hyprctl --batch "$batch_cmd"
