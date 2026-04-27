@@ -36,9 +36,6 @@
         "8": "八",
         "9": "九",
         "10": "十"
-      },
-      "persistent-workspaces": {
-        "*": 1
       }
     },
     "custom/icon": {
