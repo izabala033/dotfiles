@@ -21,4 +21,12 @@ if has_monitor "HDMI-A-2" && has_monitor "DP-1"; then
     fi
 
     hyprctl --batch "keyword monitor HDMI-A-2,preferred,0x0,$dual_scale; keyword monitor DP-1,preferred,${left_width}x0,$dual_scale" >/dev/null
+
+    for workspace in 1 2 3 4 5 6 7 8 9; do
+        hyprctl keyword workspace "$workspace,monitor:DP-1" >/dev/null
+    done
+
+    for workspace in 10 11 12 13 14 15 16 17 18 19 20; do
+        hyprctl keyword workspace "$workspace,monitor:HDMI-A-2" >/dev/null
+    done
 fi

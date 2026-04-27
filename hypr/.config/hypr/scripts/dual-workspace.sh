@@ -11,36 +11,41 @@ case "${1:-}" in
         ;;
 esac
 
-left_workspace="${1:-}"
-right_workspace="${2:-}"
+right_workspace="${1:-}"
+left_workspace="${2:-}"
 
-if [ -z "$left_workspace" ]; then
-    echo "usage: $0 [switch|move] <left-workspace-number> [right-workspace-number]" >&2
+if [ -z "$right_workspace" ]; then
+    echo "usage: $0 [switch|move] <right-workspace-number> [left-workspace-number]" >&2
     exit 1
 fi
 
-if ! printf '%s\n' "$left_workspace" | grep -Eq '^[0-9]+$'; then
-    echo "left workspace must be a number" >&2
-    exit 1
-fi
-
-if [ -n "$right_workspace" ] && ! printf '%s\n' "$right_workspace" | grep -Eq '^[0-9]+$'; then
+if ! printf '%s\n' "$right_workspace" | grep -Eq '^[0-9]+$'; then
     echo "right workspace must be a number" >&2
+    exit 1
+fi
+
+if [ -n "$left_workspace" ] && ! printf '%s\n' "$left_workspace" | grep -Eq '^[0-9]+$'; then
+    echo "left workspace must be a number" >&2
     exit 1
 fi
 
 monitors_json="$(hyprctl monitors -j)"
 monitor_count="$(printf '%s' "$monitors_json" | jq 'length')"
 
-if [ -z "$right_workspace" ]; then
-    right_workspace=$((left_workspace + 10))
+if [ -z "$left_workspace" ]; then
+    if [ "$right_workspace" -lt 10 ]; then
+        left_workspace=$((right_workspace + 9))
+    else
+        left_workspace="$right_workspace"
+        right_workspace=""
+    fi
 fi
 
 if [ "$monitor_count" -lt 2 ]; then
     if [ "$mode" = "move" ]; then
-        hyprctl dispatch movetoworkspace "$left_workspace"
+        hyprctl dispatch movetoworkspace "${right_workspace:-$left_workspace}"
     else
-        hyprctl dispatch workspace "$left_workspace"
+        hyprctl dispatch workspace "${right_workspace:-$left_workspace}"
     fi
     exit 0
 fi
@@ -58,16 +63,30 @@ focused_monitor="$(printf '%s' "$monitors_json" | jq -r '.[] | select(.focused =
 batch_cmd=""
 
 if [ "$mode" = "move" ]; then
-    batch_cmd="dispatch movetoworkspace $left_workspace;"
+    if [ -z "$right_workspace" ] || [ "$focused_monitor" = "$left_monitor" ]; then
+        move_workspace="$left_workspace"
+    else
+        move_workspace="$right_workspace"
+    fi
+
+    batch_cmd="dispatch movetoworkspace $move_workspace;"
     final_monitor="${focused_monitor:-$left_monitor}"
 else
-    final_monitor="$left_monitor"
+    if [ -z "$right_workspace" ]; then
+        final_monitor="$left_monitor"
+    else
+        final_monitor="$right_monitor"
+    fi
 fi
 
 batch_cmd="${batch_cmd}dispatch focusmonitor $left_monitor;\
-dispatch workspace $left_workspace;\
-dispatch focusmonitor $right_monitor;\
-dispatch workspace $right_workspace;\
-dispatch focusmonitor $final_monitor"
+dispatch workspace $left_workspace;"
+
+if [ -n "$right_workspace" ]; then
+    batch_cmd="${batch_cmd}dispatch focusmonitor $right_monitor;\
+dispatch workspace $right_workspace;"
+fi
+
+batch_cmd="${batch_cmd}dispatch focusmonitor $final_monitor"
 
 hyprctl --batch "$batch_cmd"
