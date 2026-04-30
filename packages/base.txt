@@ -16,3 +16,4 @@ htop
 wget
 curl
 brightnessctl
+thunar
