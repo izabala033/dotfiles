@@ -52,4 +52,14 @@ for dir in */ ; do
     fi
 done
 
+if command -v xfconf-query &> /dev/null; then
+    echo "==> Enabling Thunar thumbnails..."
+    xfconf-query \
+        --channel thunar \
+        --property /misc-thumbnail-mode \
+        --create \
+        --type string \
+        --set THUNAR_THUMBNAIL_MODE_ALWAYS
+fi
+
 echo "==> Installation complete!"

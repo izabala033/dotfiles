@@ -21,3 +21,6 @@ thunar
 thunar-archive-plugin
 xarchiver
 7zip
+tumbler
+ffmpegthumbnailer
+poppler-glib
