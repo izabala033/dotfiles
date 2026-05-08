@@ -30,6 +30,18 @@ install_packages "$DOTFILES_DIR/packages/base.txt"
 read -p "Install Hyprland packages? (y/n): " choice
 [[ $choice == [Yy]* ]] && install_packages "$DOTFILES_DIR/packages/hyprland.txt"
 
+backup_unmanaged_file() {
+    local target=$1
+    if [ -e "$target" ] && [ ! -L "$target" ]; then
+        local backup="${target}.backup.$(date +%Y%m%d%H%M%S)"
+        echo "==> Backing up unmanaged $target to $backup"
+        mv "$target" "$backup"
+    fi
+}
+
+backup_unmanaged_file "$HOME/.config/Thunar/uca.xml"
+backup_unmanaged_file "$HOME/.config/xfce4/helpers.rc"
+
 echo "==> Stowing dotfiles..."
 cd "$DOTFILES_DIR"
 

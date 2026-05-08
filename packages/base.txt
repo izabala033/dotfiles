@@ -10,6 +10,7 @@ brave-bin
 # Editor / terminal
 neovim
 kitty
+exo
 
 # Utilities
 htop
