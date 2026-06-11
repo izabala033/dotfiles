@@ -38,7 +38,7 @@ return function(opts)
             hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = tostring(i) }))
         end
 
-        hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.exec_cmd("~/.config/hypr/scripts/dual-workspace.sh move " .. i))
+        hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = tostring(i) }))
     end
 
     -- Example special workspace (scratchpad)

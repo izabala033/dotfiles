@@ -1,13 +1,13 @@
+local monitor_width = 1920
+local single_monitor_scale = 1.25
+local dual_monitor_scale = 1
+
 -- Portable default for single-monitor sessions.
--- Dual-screen layout is applied dynamically at runtime when multiple outputs
--- are present, and keeps scale at 1 there.
--- Increase the final value to make the laptop screen bigger, or lower it for
--- more space.
 hl.monitor({
     output   = "",
     mode     = "preferred",
     position = "auto",
-    scale    = 1.25,
+    scale    = single_monitor_scale,
 })
 
 local function monitor_order_state_file()
@@ -53,8 +53,8 @@ end
 local left_monitor, right_monitor = read_monitor_order()
 
 if left_monitor ~= nil and right_monitor ~= nil then
-    hl.monitor({ output = left_monitor, mode = "preferred", position = "0x0", scale = 1 })
-    hl.monitor({ output = right_monitor, mode = "preferred", position = "1920x0", scale = 1 })
+    hl.monitor({ output = left_monitor, mode = "preferred", position = "0x0", scale = dual_monitor_scale })
+    hl.monitor({ output = right_monitor, mode = "preferred", position = monitor_width .. "x0", scale = dual_monitor_scale })
 
     for workspace = 1, 9 do
         hl.workspace_rule({ workspace = tostring(workspace), monitor = right_monitor })

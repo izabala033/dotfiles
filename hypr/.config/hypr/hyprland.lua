@@ -15,18 +15,8 @@ local terminal = "kitty"
 local fileManager = "thunar"
 local menu = "rofi -show drun -show-icons"
 
------------------
---- AUTOSTART ---
------------------
-
-local function run_layout_scripts()
-    hl.exec_cmd("~/.config/hypr/scripts/configure-monitors.sh")
-    hl.exec_cmd("~/.config/hypr/scripts/dual-workspace.sh 1")
-end
-
 hl.on("hyprland.start", function()
     hl.exec_cmd("nm-applet")
-    run_layout_scripts()
     hl.exec_cmd("~/.config/hypr/scripts/launch-waybar.sh")
     hl.exec_cmd("~/.config/hypr/scripts/launch-awww.sh")
     hl.exec_cmd("brave")
