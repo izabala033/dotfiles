@@ -23,7 +23,8 @@ set_workspace_monitor() {
 
 monitors_json="$(hyprctl monitors -j 2>/dev/null || printf '[]')"
 dual_scale="1"
-state_file="${XDG_STATE_HOME:-$HOME/.local/state}/hypr/monitor-order"
+state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/hypr"
+state_file="$state_dir/monitor-order"
 
 monitor_count="$(printf '%s' "$monitors_json" | jq 'length')"
 
@@ -51,6 +52,9 @@ if [ "$monitor_count" -ge 2 ]; then
 
     set_monitor "$left_monitor" "$dual_scale" "0x0"
     set_monitor "$right_monitor" "$dual_scale" "${left_width}x0"
+
+    mkdir -p "$state_dir"
+    printf '%s\n%s\n' "$left_monitor" "$right_monitor" > "$state_file"
 
     for workspace in 1 2 3 4 5 6 7 8 9; do
         set_workspace_monitor "$workspace" "$right_monitor"

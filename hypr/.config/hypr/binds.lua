@@ -30,7 +30,14 @@ return function(opts)
     -- 0 switches workspace 10 on the left monitor.
     for i = 1, 10 do
         local key = i % 10
-        hl.bind(mainMod .. " + " .. key, hl.dsp.exec_cmd("~/.config/hypr/scripts/dual-workspace.sh " .. i))
+
+        if i < 10 then
+            hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = tostring(i + 9) }))
+            hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = tostring(i) }))
+        else
+            hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = tostring(i) }))
+        end
+
         hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.exec_cmd("~/.config/hypr/scripts/dual-workspace.sh move " .. i))
     end
 

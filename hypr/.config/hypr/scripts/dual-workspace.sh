@@ -8,16 +8,38 @@ dispatch_lua() {
     hyprctl dispatch "$1"
 }
 
+dispatch_batch() {
+    hyprctl --batch "$1" >/dev/null
+}
+
 focus_monitor() {
     dispatch_lua "hl.dsp.focus({ monitor = \"$1\" })"
 }
 
 focus_workspace() {
-    dispatch_lua "hl.dsp.focus({ workspace = $1 })"
+    dispatch_lua "hl.dsp.focus({ workspace = \"$1\" })"
 }
 
 move_to_workspace() {
-    dispatch_lua "hl.dsp.window.move({ workspace = $1 })"
+    dispatch_lua "hl.dsp.window.move({ workspace = \"$1\" })"
+}
+
+get_monitors_json() {
+    attempt=0
+
+    while [ "$attempt" -lt 3 ]; do
+        if monitors_json="$(hyprctl monitors -j 2>/dev/null)" &&
+           printf '%s' "$monitors_json" | jq -e 'type == "array"' >/dev/null 2>&1; then
+            printf '%s' "$monitors_json"
+            return 0
+        fi
+
+        attempt=$((attempt + 1))
+        sleep 0.05
+    done
+
+    echo "unable to read Hyprland monitors" >&2
+    return 1
 }
 
 case "${1:-}" in
@@ -45,7 +67,7 @@ if [ -n "$left_workspace" ] && ! printf '%s\n' "$left_workspace" | grep -Eq '^[0
     exit 1
 fi
 
-monitors_json="$(hyprctl monitors -j)"
+monitors_json="$(get_monitors_json)"
 monitor_count="$(printf '%s' "$monitors_json" | jq 'length')"
 
 if [ -z "$left_workspace" ]; then
@@ -87,12 +109,11 @@ else
     fi
 fi
 
-focus_monitor "$left_monitor"
-focus_workspace "$left_workspace"
+batch="dispatch hl.dsp.focus({ monitor = \"$left_monitor\" }); dispatch hl.dsp.focus({ workspace = \"$left_workspace\" })"
 
 if [ -n "$right_workspace" ]; then
-    focus_monitor "$right_monitor"
-    focus_workspace "$right_workspace"
+    batch="$batch; dispatch hl.dsp.focus({ monitor = \"$right_monitor\" }); dispatch hl.dsp.focus({ workspace = \"$right_workspace\" })"
 fi
 
-focus_monitor "$final_monitor"
+batch="$batch; dispatch hl.dsp.focus({ monitor = \"$final_monitor\" })"
+dispatch_batch "$batch"
