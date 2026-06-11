@@ -4,6 +4,22 @@ set -eu
 
 mode="switch"
 
+dispatch_lua() {
+    hyprctl dispatch "$1"
+}
+
+focus_monitor() {
+    dispatch_lua "hl.dsp.focus({ monitor = \"$1\" })"
+}
+
+focus_workspace() {
+    dispatch_lua "hl.dsp.focus({ workspace = $1 })"
+}
+
+move_to_workspace() {
+    dispatch_lua "hl.dsp.window.move({ workspace = $1 })"
+}
+
 case "${1:-}" in
     switch|move)
         mode="$1"
@@ -43,9 +59,9 @@ fi
 
 if [ "$monitor_count" -lt 2 ]; then
     if [ "$mode" = "move" ]; then
-        hyprctl dispatch movetoworkspace "${right_workspace:-$left_workspace}"
+        move_to_workspace "${right_workspace:-$left_workspace}"
     else
-        hyprctl dispatch workspace "${right_workspace:-$left_workspace}"
+        focus_workspace "${right_workspace:-$left_workspace}"
     fi
     exit 0
 fi
@@ -54,8 +70,6 @@ left_monitor="$(printf '%s' "$monitors_json" | jq -r 'sort_by(.x, .id) | .[0].na
 right_monitor="$(printf '%s' "$monitors_json" | jq -r 'sort_by(.x, .id) | .[1].name')"
 focused_monitor="$(printf '%s' "$monitors_json" | jq -r '.[] | select(.focused == true) | .name')"
 
-batch_cmd=""
-
 if [ "$mode" = "move" ]; then
     if [ -z "$right_workspace" ] || [ "$focused_monitor" = "$left_monitor" ]; then
         move_workspace="$left_workspace"
@@ -63,7 +77,7 @@ if [ "$mode" = "move" ]; then
         move_workspace="$right_workspace"
     fi
 
-    batch_cmd="dispatch movetoworkspace $move_workspace;"
+    move_to_workspace "$move_workspace"
     final_monitor="${focused_monitor:-$left_monitor}"
 else
     if [ -z "$right_workspace" ]; then
@@ -73,14 +87,12 @@ else
     fi
 fi
 
-batch_cmd="${batch_cmd}dispatch focusmonitor $left_monitor;\
-dispatch workspace $left_workspace;"
+focus_monitor "$left_monitor"
+focus_workspace "$left_workspace"
 
 if [ -n "$right_workspace" ]; then
-    batch_cmd="${batch_cmd}dispatch focusmonitor $right_monitor;\
-dispatch workspace $right_workspace;"
+    focus_monitor "$right_monitor"
+    focus_workspace "$right_workspace"
 fi
 
-batch_cmd="${batch_cmd}dispatch focusmonitor $final_monitor"
-
-hyprctl --batch "$batch_cmd"
+focus_monitor "$final_monitor"
