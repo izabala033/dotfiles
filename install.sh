@@ -41,6 +41,7 @@ backup_unmanaged_file() {
 
 backup_unmanaged_file "$HOME/.config/Thunar/uca.xml"
 backup_unmanaged_file "$HOME/.config/xfce4/helpers.rc"
+backup_unmanaged_file "$HOME/.config/hypr/hyprland.conf"
 backup_unmanaged_file "$HOME/.config/hypr/hyprland.lua"
 
 echo "==> Stowing dotfiles..."
